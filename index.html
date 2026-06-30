@@ -113,6 +113,8 @@
     <script>
         function toggleSidebar() { document.getElementById('sidebar').classList.toggle('active'); }
         
+        window.onpageshow = function(event) { if (event.persisted) { window.location.reload(); } };
+
         let count = 0;
         let counter = setInterval(() => {
             if(count < 100) { count++; document.getElementById('percentage').innerText = count + "%"; }
