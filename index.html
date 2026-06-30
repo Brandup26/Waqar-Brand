@@ -54,10 +54,11 @@
         .item-card h3 { margin: 10px 0 5px 0; font-size: 1rem; font-weight: 700; color: #222; }
         .btn-details { background: #ff69b4; color: #fff; border: none; padding: 8px; border-radius: 12px; font-weight: bold; cursor: pointer; width: 100%; font-size: 0.8rem; }
         
-        footer { padding: 20px; text-align: center; background: #fff; border-top: 1px solid #eee; margin-top: 20px; }
-        .social-links { display: flex; justify-content: center; gap: 20px; font-size: 1.5rem; margin-bottom: 10px; }
-        .social-links a { color: #ff69b4; text-decoration: none; }
-        .copy-info { font-size: 0.8rem; line-height: 1.8; color: #777; }
+        footer { padding: 30px 20px; text-align: center; background: linear-gradient(135deg, #2d2d2d, #1a1a1a); color: #fff; border-top: 3px solid #ff69b4; margin-top: 20px; }
+        .footer-social { display: flex; justify-content: center; gap: 25px; font-size: 1.8rem; margin-bottom: 20px; }
+        .footer-social a { color: #ff69b4; transition: 0.3s; }
+        .footer-social a:hover { color: #fff; }
+        .copy-info { font-size: 0.85rem; line-height: 1.8; color: #ccc; }
         .copy-info a { color: #ff69b4; text-decoration: none; font-weight: bold; }
         
         *:focus { outline: none !important; -webkit-tap-highlight-color: transparent !important; }
@@ -99,6 +100,11 @@
     <div class="container" id="collection"></div>
 
     <footer>
+        <div class="footer-social">
+            <a href="https://www.facebook.com/share/14h7vFHN7fZ/" target="_blank"><i class="fab fa-facebook"></i></a>
+            <a href="https://www.instagram.com/waqa.r9238?igsh=MWo4ZXA4dGU1ZzF1cg==" target="_blank"><i class="fab fa-instagram"></i></a>
+            <a href="https://www.tiktok.com/@waqar223441?_r=1&_t=ZS-97eVIItH5xE" target="_blank"><i class="fab fa-tiktok"></i></a>
+        </div>
         <div class="copy-info">
             جميع الحقوق محفوظة لدى WAQAR 2026<br>
             Designed by eng / Anas Gaber shehata<br>
@@ -135,11 +141,12 @@
                 if(cols[0] && !isNaN(cols[0]) && cols[1]) {
                     const id = cols[0].trim();
                     const name = cols[1].trim();
+                    const imgCount = parseInt(cols[2]) || 1;
                     container.innerHTML += `
                         <div class="item-card">
-                            <img src="images/${name}.jpg" alt="${name}">
-                            <h3>${name}</h3>
-                            <button class="btn-details" onclick="window.location.href='details.html?id=${id}'">عرض التفاصيل</button>
+                            <img src="images/${name}_1.jpg" alt="${name}">
+                            <h3>${name} ✨</h3>
+                            <button class="btn-details" onclick="window.location.href='details.html?id=${id}&count=${imgCount}'">عرض التفاصيل</button>
                         </div>
                     `;
                 }
