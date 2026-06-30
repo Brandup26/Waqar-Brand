@@ -10,7 +10,6 @@
         body { font-family: 'Tajawal', sans-serif; background: #fffafb; color: #333; margin: 0; padding: 0; }
         .container { max-width: 500px; margin: auto; padding-bottom: 50px; }
         
-        /* سلايدر الصور */
         .swiper { width: 100%; height: 350px; border-radius: 0 0 30px 30px; }
         .swiper-slide img { width: 100%; height: 100%; object-fit: cover; }
 
@@ -19,19 +18,14 @@
         .price { font-size: 1.5rem; font-weight: bold; color: #333; margin-bottom: 15px; }
         .description { line-height: 1.8; margin-bottom: 20px; }
 
-        /* سلكتور المقاس واللون */
         select { width: 100%; padding: 12px; margin-bottom: 10px; border-radius: 10px; border: 1px solid #ddd; background: #fff; }
-
-        /* الملحوظة */
         .note { background: #ffeef5; padding: 15px; border-radius: 15px; border-right: 5px solid #ff69b4; font-size: 0.9rem; line-height: 1.6; }
-
         .buy-btn { background: #ff69b4; color: #fff; border: none; padding: 15px; width: 100%; border-radius: 15px; font-weight: bold; margin-top: 20px; }
     </style>
 </head>
 <body>
 
 <div class="container" id="details">
-    <!-- المحتوى هيتحمل هنا -->
     <p style="text-align:center; margin-top:50px;">جاري تحميل التفاصيل...</p>
 </div>
 
@@ -41,27 +35,27 @@
     const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQSMKhHdK0M6unNQwdEsFoY72WO9prnqXk5z9XiuNJJfzbQm0_Gxn2Q0GCl0pBXAophE7b_pK2MdR3p/pub?output=csv';
 
     fetch(csvUrl).then(res => res.text()).then(data => {
-        const row = data.split('\n').find(r => r.split(',')[0] == id).split(',');
+        const rows = data.split('\n');
+        const row = rows.find(r => r.split(',')[0] == id).split(',');
         
-        // تعديل: هنفترض ترتيب الأعمدة في الشيت: 1=الاسم، 2=السعر، 3=الوصف، 4=الصور، 5=المقاس، 6=اللون، 7=الملحوظة
+        // الترتيب: 1=Name, 2=Price, 3=ImagePath, 5=Sizes, 6=Colors, 7=Description, 8=Note
         document.getElementById('details').innerHTML = `
             <div class="swiper">
                 <div class="swiper-wrapper">
-                    ${row[4].split('|').map(img => `<div class="swiper-slide"><img src="${img.trim()}"></div>`).join('')}
+                    <div class="swiper-slide"><img src="${row[3].trim()}"></div>
                 </div>
-                <div class="swiper-pagination"></div>
             </div>
             <div class="content">
                 <h1>${row[1]}</h1>
                 <div class="price">${row[2]} ج.م</div>
-                <p class="description">${row[3]}</p>
-                <select><option>اختر المقاس: ${row[5]}</option></select>
-                <select><option>اختر اللون: ${row[6]}</option></select>
-                <div class="note"><strong>ملاحظة:</strong> ${row[7]}</div>
+                <p class="description">${row[7]}</p>
+                <select><option>المقاس: ${row[5]}</option></select>
+                <select><option>اللون: ${row[6]}</option></select>
+                <div class="note"><strong>ملاحظة:</strong> ${row[8]}</div>
                 <button class="buy-btn">إتمام الطلب عبر واتساب</button>
             </div>
         `;
-        new Swiper('.swiper', { pagination: { el: '.swiper-pagination' } });
+        new Swiper('.swiper', {});
     });
 </script>
 </body>
