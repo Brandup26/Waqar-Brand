@@ -135,12 +135,11 @@
                 if(cols[0] && !isNaN(cols[0]) && cols[1]) {
                     const id = cols[0].trim();
                     const name = cols[1].trim();
-                    const imgCount = parseInt(cols[2]) || 1; // ديناميكي: يقرأ عدد الصور من العمود الثالث
                     container.innerHTML += `
                         <div class="item-card">
-                            <img src="images/${name}_1.jpg" alt="${name}">
-                            <h3>${name} ✨</h3>
-                            <button class="btn-details" onclick="window.location.href='details.html?id=${id}&count=${imgCount}'">عرض التفاصيل</button>
+                            <img src="images/${name}.jpg" alt="${name}">
+                            <h3>${name}</h3>
+                            <button class="btn-details" onclick="window.location.href='details.html?id=${id}'">عرض التفاصيل</button>
                         </div>
                     `;
                 }
