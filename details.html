@@ -10,22 +10,20 @@
         body { font-family: 'Tajawal', sans-serif; background: #fffafb; color: #333; margin: 0; padding: 0; }
         .container { max-width: 500px; margin: auto; }
         #details { opacity: 0; transition: opacity 0.5s; }
-        
         .swiper { width: 100%; height: 350px; background: #f9f9f9; }
         .swiper-slide img { width: 100%; height: 100%; object-fit: contain; }
-        
         .content { padding: 20px; }
         h1 { color: #ff69b4; text-align: center; }
         .price { font-size: 1.5rem; font-weight: bold; text-align: center; margin-bottom: 15px; }
-        select { width: 100%; padding: 12px; margin-bottom: 10px; border-radius: 10px; border: 1px solid #ddd; background: #fff; }
-        
-        /* تصميم عداد الكمية */
-        .qty-container { display: flex; justify-content: center; align-items: center; gap: 15px; margin: 15px 0; }
-        .qty-btn { width: 40px; height: 40px; border-radius: 50%; border: none; background: #ff69b4; color: white; font-size: 20px; cursor: pointer; }
-        .qty-value { font-size: 1.2rem; font-weight: bold; width: 30px; text-align: center; }
-        
-        .note-box { background: #ffeef5; padding: 15px; border-radius: 15px; border: 1px solid #ff69b4; margin: 15px 0; }
-        .buy-btn { background: #ff69b4; color: #fff; border: none; padding: 15px; width: 100%; border-radius: 15px; font-weight: bold; cursor: pointer; }
+        select, input { width: 100%; padding: 12px; margin-bottom: 10px; border-radius: 10px; border: 1px solid #ddd; box-sizing: border-box; }
+        .qty-container { display: flex; flex-direction: column; align-items: center; margin: 10px 0; }
+        .qty-wrapper { display: flex; align-items: center; gap: 15px; }
+        .qty-btn { width: 30px; height: 30px; border-radius: 50%; border: none; background: #ff69b4; color: white; cursor: pointer; outline: none; }
+        .qty-btn:focus { outline: none; }
+        .qty-value { font-weight: bold; width: 25px; text-align: center; }
+        .note-box { background: #ffeef5; padding: 10px; border-radius: 10px; border: 1px solid #ff69b4; font-size: 0.9rem; margin: 10px 0; }
+        .main-btn { background: #ff69b4; color: #fff; border: none; padding: 15px; width: 100%; border-radius: 10px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        #order-form { display: none; padding: 20px; }
     </style>
 </head>
 <body>
@@ -38,42 +36,34 @@
     const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQSMKhHdK0M6unNQwdEsFoY72WO9prnqXk5z9XiuNJJfzbQm0_Gxn2Q0GCl0pBXAophE7b_pK2MdR3p/pub?output=csv';
 
     fetch(csvUrl).then(res => res.text()).then(data => {
-        const lines = data.split('\n');
-        const row = lines.find(r => r.startsWith(id + ','));
-        
+        const row = data.split('\n').find(r => r.startsWith(id + ','));
         if (row) {
             const cols = row.split(',');
-            const name = cols[1].trim(); 
-            const encodedName = encodeURIComponent(name);
-
             document.getElementById('details').innerHTML = `
-                <div class="swiper">
-                    <div class="swiper-wrapper">
-                        <div class="swiper-slide"><img src="images/${encodedName}%201.jpg"></div>
-                        <div class="swiper-slide"><img src="images/${encodedName}%202.jpg"></div>
-                        <div class="swiper-slide"><img src="images/${encodedName}%203.jpg"></div>
-                    </div>
-                    <div class="swiper-button-next"></div>
-                    <div class="swiper-button-prev"></div>
-                </div>
-                <div class="content">
-                    <h1>${name}</h1>
+                <div class="swiper"><div class="swiper-wrapper"><div class="swiper-slide"><img src="images/${encodeURIComponent(cols[1].trim())}%201.jpg"></div><div class="swiper-slide"><img src="images/${encodeURIComponent(cols[1].trim())}%202.jpg"></div><div class="swiper-slide"><img src="images/${encodeURIComponent(cols[1].trim())}%203.jpg"></div></div></div>
+                <div class="content" id="product-view">
+                    <h1>${cols[1]}</h1>
                     <div class="price">${cols[2]} ج.م</div>
-                    <p>${cols[7]}</p>
-                    
-                    <select><option selected disabled>Size</option>${cols[5].split('-').map(s => `<option>${s.trim()}</option>`).join('')}</select>
-                    <select><option selected disabled>Colour</option>${cols[6].split('-').map(c => `<option>${c.trim()}</option>`).join('')}</select>
-                    
+                    <select id="size"><option selected disabled>Size</option>${cols[5].split('-').map(s => `<option>${s.trim()}</option>`).join('')}</select>
+                    <select id="color"><option selected disabled>Colour</option>${cols[6].split('-').map(c => `<option>${c.trim()}</option>`).join('')}</select>
                     <div class="qty-container">
-                        <button class="qty-btn" onclick="changeQty(-1)">-</button>
-                        <span class="qty-value" id="qty">1</span>
-                        <button class="qty-btn" onclick="changeQty(1)">+</button>
+                        <div class="qty-wrapper"><button class="qty-btn" onclick="changeQty(-1)">-</button><span class="qty-value" id="qty">1</span><button class="qty-btn" onclick="changeQty(1)">+</button></div>
+                        <small>عدد القطع</small>
                     </div>
-                    
-                    <div class="note-box">
-                        <strong>ملاحظة:</strong> ${cols[3]}
-                    </div>
-                    <button class="buy-btn">إتمام الطلب عبر واتساب</button>
+                    <button class="main-btn" onclick="showForm()">تأكيد الطلب</button>
+                </div>
+                <div id="order-form">
+                    <div class="note-box">🛍️✨ تأكيد الطلب يتم بتحويل 200 جنيه دفعة مقدمة لضمان حجز القطعة، والباقي عند الاستلام.</div>
+                    <input type="text" id="name" placeholder="الاسم بالكامل">
+                    <input type="tel" id="phone" placeholder="رقم الهاتف">
+                    <input type="tel" id="altPhone" placeholder="رقم هاتف بديل">
+                    <input type="text" id="city" placeholder="المدينة">
+                    <input type="text" id="area" placeholder="المنطقة">
+                    <input type="text" id="street" placeholder="الشارع الرئيسي">
+                    <input type="text" id="building" placeholder="رقم العمارة">
+                    <input type="text" id="floor" placeholder="الدور">
+                    <input type="text" id="flat" placeholder="رقم الشقة">
+                    <button class="main-btn" onclick="sendWhatsApp('${cols[1]}', '${cols[2]}')">شراء الآن</button>
                 </div>
             `;
             document.getElementById('details').style.opacity = 1;
@@ -81,13 +71,20 @@
         }
     });
 
-    // دالة تغيير الكمية
     function changeQty(val) {
-        let qtySpan = document.getElementById('qty');
-        let current = parseInt(qtySpan.innerText);
-        if (current + val > 0) {
-            qtySpan.innerText = current + val;
-        }
+        let q = document.getElementById('qty');
+        let n = parseInt(q.innerText) + val;
+        if (n > 0) q.innerText = n;
+    }
+
+    function showForm() {
+        document.getElementById('product-view').style.display = 'none';
+        document.getElementById('order-form').style.display = 'block';
+    }
+
+    function sendWhatsApp(name, price) {
+        let msg = `طلب جديد:%0Aالمنتج: ${name}%0Aالسعر: ${price}%0Aالمقاس: ${document.getElementById('size').value}%0Aاللون: ${document.getElementById('color').value}%0Aالكمية: ${document.getElementById('qty').innerText}%0A%0Aبيانات العميل:%0Aالاسم: ${document.getElementById('name').value}%0Aالهاتف: ${document.getElementById('phone').value}%0Aالهاتف البديل: ${document.getElementById('altPhone').value}%0Aالعنوان: ${document.getElementById('city').value}، ${document.getElementById('area').value}، ${document.getElementById('street').value}، عمارة ${document.getElementById('building').value}، دور ${document.getElementById('floor').value}، شقة ${document.getElementById('flat').value}`;
+        window.open('https://wa.me/201208377222?text=' + msg);
     }
 </script>
 </body>
