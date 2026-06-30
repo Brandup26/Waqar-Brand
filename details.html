@@ -6,48 +6,31 @@
     <title>تفاصيل المنتج</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Tajawal', sans-serif; background: #fffafb; padding: 20px; text-align: center; }
-        .loading { color: #ff69b4; font-size: 1.2rem; }
+        body { font-family: 'Tajawal', sans-serif; background: #fffafb; color: #333; margin: 0; padding: 20px; text-align: center; }
+        h1 { color: #ff69b4; }
+        .price { font-size: 1.5rem; font-weight: bold; margin: 10px 0; }
+        .note { color: #ff69b4; line-height: 1.8; margin-top: 20px; font-size: 1.1rem; }
     </style>
 </head>
 <body>
 
-<div id="details" class="loading">جاري تحميل البيانات...</div>
+<div id="details">جاري التحميل...</div>
 
 <script>
-    const urlParams = new URLSearchParams(window.location.search);
-    const id = urlParams.get('id');
+    const id = new URLSearchParams(window.location.search).get('id');
+    const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQSMKhHdK0M6unNQwdEsFoY72WO9prnqXk5z9XiuNJJfzbQm0_Gxn2Q0GCl0pBXAophE7b_pK2MdR3p/pub?output=csv';
 
-    if (!id) {
-        document.getElementById('details').innerHTML = "خطأ: لم يتم تحديد المنتج!";
-    } else {
-        const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQSMKhHdK0M6unNQwdEsFoY72WO9prnqXk5z9XiuNJJfzbQm0_Gxn2Q0GCl0pBXAophE7b_pK2MdR3p/pub?output=csv';
-
-        fetch(csvUrl)
-            .then(res => res.text())
-            .then(data => {
-                const lines = data.split('\n');
-                const row = lines.find(r => r.startsWith(id + ','));
-                
-                if (!row) {
-                    document.getElementById('details').innerHTML = "خطأ: لم نجد المنتج رقم " + id;
-                    return;
-                }
-
-                const cols = row.split(',');
-                // طباعة البيانات للتأكد من وصولها
-                console.log("البيانات المستلمة:", cols);
-
-                document.getElementById('details').innerHTML = `
-                    <h1>${cols[1]}</h1>
-                    <p>السعر: ${cols[2]} ج.م</p>
-                    <p>الملاحظة: ${cols[3]}</p>
-                `;
-            })
-            .catch(err => {
-                document.getElementById('details').innerHTML = "حدث خطأ أثناء الاتصال بالشيت.";
-            });
-    }
+    fetch(csvUrl).then(res => res.text()).then(data => {
+        const row = data.split('\n').find(r => r.startsWith(id + ',')).split(',');
+        
+        // الترتيب الجديد: 3 هو الـ Note، و 8 هو الـ ImagePath
+        // الاسم[1]، السعر[2]، الملاحظة[3]
+        document.getElementById('details').innerHTML = `
+            <h1>${row[1]}</h1>
+            <div class="price">السعر: ${row[2]} ج.م</div>
+            <div class="note">الملاحظة: ${row[3]}</div>
+        `;
+    });
 </script>
 </body>
 </html>
