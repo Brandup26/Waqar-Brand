@@ -9,18 +9,14 @@
     <style>
         body { font-family: 'Tajawal', sans-serif; background: #fffafb; color: #333; margin: 0; padding: 0; }
         .container { max-width: 500px; margin: auto; padding-bottom: 50px; }
-        
-        /* إعدادات السلايدر */
         .swiper { width: 100%; height: 350px; }
         .swiper-slide img { width: 100%; height: 100%; object-fit: cover; }
-        
         .content { padding: 20px; }
         h1 { color: #ff69b4; text-align: center; }
         .price { font-size: 1.5rem; font-weight: bold; text-align: center; margin-bottom: 15px; }
-        
-        select { width: 100%; padding: 12px; margin-bottom: 10px; border-radius: 10px; border: 1px solid #ddd; background: #fff; }
+        select { width: 100%; padding: 12px; margin-bottom: 10px; border-radius: 10px; border: 1px solid #ddd; background: #fff; font-family: 'Tajawal', sans-serif; }
         .note-box { background: #ffeef5; padding: 15px; border-radius: 15px; border: 1px solid #ff69b4; margin: 15px 0; }
-        .buy-btn { background: #ff69b4; color: #fff; border: none; padding: 15px; width: 100%; border-radius: 15px; font-weight: bold; cursor: pointer; }
+        .buy-btn { background: #ff69b4; color: #fff; border: none; padding: 15px; width: 100%; border-radius: 15px; font-weight: bold; cursor: pointer; font-family: 'Tajawal', sans-serif; }
     </style>
 </head>
 <body>
@@ -34,20 +30,24 @@
 
     fetch(csvUrl).then(res => res.text()).then(data => {
         const row = data.split('\n').find(r => r.startsWith(id + ',')).split(',');
-        const name = row[1].trim();
+        
+        // المتغيرات المطلوبة:
+        const displayName = row[1].trim();      // الاسم بالنجمة للعرض
+        const imageCode = row[9].trim();        // العمود 10 (ImageCode)
+        const encodedImage = encodeURIComponent(imageCode);
 
         document.getElementById('details').innerHTML = `
             <div class="swiper">
                 <div class="swiper-wrapper">
-                    <div class="swiper-slide"><img src="images/${name}-1.jpg"></div>
-                    <div class="swiper-slide"><img src="images/${name}-2.jpg"></div>
-                    <div class="swiper-slide"><img src="images/${name}-3.jpg"></div>
+                    <div class="swiper-slide"><img src="images/${encodedImage}%201.jpg"></div>
+                    <div class="swiper-slide"><img src="images/${encodedImage}%202.jpg"></div>
+                    <div class="swiper-slide"><img src="images/${encodedImage}%203.jpg"></div>
                 </div>
                 <div class="swiper-button-next"></div>
                 <div class="swiper-button-prev"></div>
             </div>
             <div class="content">
-                <h1>${name}</h1>
+                <h1>${displayName}</h1>
                 <div class="price">${row[2]} ج.م</div>
                 <p>${row[7]}</p>
                 
@@ -64,6 +64,7 @@
                 <div class="note-box">
                     <strong>ملاحظة:</strong> ${row[3]}
                 </div>
+                
                 <button class="buy-btn">إتمام الطلب عبر واتساب</button>
             </div>
         `;
