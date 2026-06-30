@@ -9,25 +9,19 @@
     <style>
         body { font-family: 'Tajawal', sans-serif; background: #fffafb; color: #333; margin: 0; padding: 0; }
         .container { max-width: 500px; margin: auto; padding-bottom: 50px; }
-        
         .swiper { width: 100%; height: 350px; border-radius: 0 0 30px 30px; }
         .swiper-slide img { width: 100%; height: 100%; object-fit: cover; }
-
         .content { padding: 20px; }
-        h1 { margin: 0 0 10px 0; color: #ff69b4; }
-        .price { font-size: 1.5rem; font-weight: bold; color: #333; margin-bottom: 15px; }
-        .description { line-height: 1.8; margin-bottom: 20px; }
-
-        select { width: 100%; padding: 12px; margin-bottom: 10px; border-radius: 10px; border: 1px solid #ddd; background: #fff; }
-        .note { background: #ffeef5; padding: 15px; border-radius: 15px; border-right: 5px solid #ff69b4; font-size: 0.9rem; line-height: 1.6; }
-        .buy-btn { background: #ff69b4; color: #fff; border: none; padding: 15px; width: 100%; border-radius: 15px; font-weight: bold; margin-top: 20px; }
+        h1 { color: #ff69b4; }
+        .price { font-size: 1.5rem; font-weight: bold; margin-bottom: 15px; }
+        select { width: 100%; padding: 12px; margin-bottom: 10px; border-radius: 10px; border: 1px solid #ddd; }
+        .note { background: #ffeef5; padding: 15px; border-radius: 15px; border: 1px solid #ff69b4; margin: 15px 0; }
+        .buy-btn { background: #ff69b4; color: #fff; border: none; padding: 15px; width: 100%; border-radius: 15px; font-weight: bold; }
     </style>
 </head>
 <body>
 
-<div class="container" id="details">
-    <p style="text-align:center; margin-top:50px;">جاري تحميل التفاصيل...</p>
-</div>
+<div class="container" id="details"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script>
@@ -35,27 +29,31 @@
     const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQSMKhHdK0M6unNQwdEsFoY72WO9prnqXk5z9XiuNJJfzbQm0_Gxn2Q0GCl0pBXAophE7b_pK2MdR3p/pub?output=csv';
 
     fetch(csvUrl).then(res => res.text()).then(data => {
-        const rows = data.split('\n');
-        const row = rows.find(r => r.split(',')[0] == id).split(',');
+        const row = data.split('\n').find(r => r.split(',')[0] == id).split(',');
         
-        // الترتيب: 1=Name, 2=Price, 3=ImagePath, 5=Sizes, 6=Colors, 7=Description, 8=Note
+        // تقسيم المقاسات والألوان (بناءً على علامة -)
+        const sizes = row[5].split('-').map(s => `<option>${s.trim()}</option>`).join('');
+        const colors = row[6].split('-').map(c => `<option>${c.trim()}</option>`).join('');
+
         document.getElementById('details').innerHTML = `
             <div class="swiper">
                 <div class="swiper-wrapper">
-                    <div class="swiper-slide"><img src="${row[3].trim()}"></div>
+                    <div class="swiper-slide"><img src="images/${row[1].trim()}-1.jpg"></div>
+                    <div class="swiper-slide"><img src="images/${row[1].trim()}-2.jpg"></div>
                 </div>
+                <div class="swiper-pagination"></div>
             </div>
             <div class="content">
                 <h1>${row[1]}</h1>
                 <div class="price">${row[2]} ج.م</div>
-                <p class="description">${row[7]}</p>
-                <select><option>المقاس: ${row[5]}</option></select>
-                <select><option>اللون: ${row[6]}</option></select>
+                <p>${row[7]}</p>
+                <select><option>اختر المقاس</option>${sizes}</select>
+                <select><option>اختر اللون</option>${colors}</select>
                 <div class="note"><strong>ملاحظة:</strong> ${row[8]}</div>
                 <button class="buy-btn">إتمام الطلب عبر واتساب</button>
             </div>
         `;
-        new Swiper('.swiper', {});
+        new Swiper('.swiper', { pagination: { el: '.swiper-pagination' } });
     });
 </script>
 </body>
