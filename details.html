@@ -9,10 +9,7 @@
     <style>
         body { font-family: 'Tajawal', sans-serif; background: #fffafb; color: #333; margin: 0; padding: 0; }
         .container { max-width: 500px; margin: auto; }
-        
-        /* إخفاء أي شيء أثناء التحميل */
         #details { opacity: 0; transition: opacity 0.5s; }
-        
         .swiper { width: 100%; height: 350px; }
         .swiper-slide img { width: 100%; height: 100%; object-fit: cover; }
         .content { padding: 20px; }
@@ -34,13 +31,14 @@
 
     fetch(csvUrl).then(res => res.text()).then(data => {
         const lines = data.split('\n');
-        // البحث عن الصف باستخدام الـ ID
         const row = lines.find(r => r.startsWith(id + ','));
         
         if (row) {
             const cols = row.split(',');
+            // العمود J هو العنصر العاشر، يعني رقمه في البرمجة هو [9]
+            // بنقرأ الاسم من [1]، السعر من [2]، النوت من [3]، المقاس من [5]، اللون من [6]، الوصف من [7]، والـ imageCode من [9]
             const displayName = cols[1].trim();
-            const imageCode = cols[9].trim();
+            const imageCode = cols[9].trim(); 
             const encodedImage = encodeURIComponent(imageCode);
 
             document.getElementById('details').innerHTML = `
@@ -67,13 +65,9 @@
                     <button class="buy-btn">إتمام الطلب عبر واتساب</button>
                 </div>
             `;
-            // إظهار المحتوى فور التحميل
             document.getElementById('details').style.opacity = 1;
             new Swiper('.swiper', { navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' } });
         }
-    }).catch(err => {
-        console.error("خطأ في التحميل", err);
-        // في حال فشل التحميل، ممكن تحول الزائر لصفحة تانية أو تظهر رسالة
     });
 </script>
 </body>
