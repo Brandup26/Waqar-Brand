@@ -7,7 +7,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* أنيميشن اللوجو وكرييتف لودر */
         #splash-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: #fffafb; display: flex; flex-direction: column;
@@ -27,13 +26,23 @@
         body { font-family: 'Tajawal', sans-serif; background: #fffafb; color: #333; margin: 0; padding: 0; transition: background 0.3s, color 0.3s; min-height: 100vh; display: flex; flex-direction: column; }
         body.dark-mode { background: #1a1a1a; color: #f1f1f1; }
         body.dark-mode .item-card { background: #2d2d2d; }
-        body.dark-mode .item-card h3 { color: #f1f1f1; }
+        body.dark-mode .sidebar { background: #2d2d2d; color: #f1f1f1; }
         body.dark-mode footer { background: #2d2d2d; color: #f1f1f1; }
 
         header { background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('images/brand.jpg') center/cover; height: 35vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; color: white; }
         
+        .menu-btn { position: absolute; top: 15px; right: 15px; cursor: pointer; font-size: 1.8rem; z-index: 1000; }
+        .sidebar { 
+            position: fixed; top: 0; right: -280px; width: 280px; height: 100%; 
+            background: #fff; z-index: 2000; transition: 0.4s; padding: 20px; box-shadow: -5px 0 15px rgba(0,0,0,0.1); overflow-y: auto;
+        }
+        .sidebar.active { right: 0; }
+        .sidebar h3 { color: #ff69b4; margin-top: 20px; }
+        .sidebar p { font-size: 0.9rem; line-height: 1.6; }
+        .social-links { display: flex; justify-content: center; gap: 20px; font-size: 1.5rem; margin-top: 10px; }
+        .social-links a { color: #ff69b4; text-decoration: none; }
+
         .theme-toggle { position: absolute; top: 15px; left: 15px; cursor: pointer; font-size: 1.5rem; z-index: 1000; user-select: none; }
-        
         .divider-container { text-align: center; margin-top: 30px; }
         .divider { height: 2px; background: #ff69b4; margin: 10px auto; width: 60px; border-radius: 5px; }
         .collection-title { font-weight: bold; color: #ff69b4; margin-bottom: 5px; }
@@ -44,14 +53,11 @@
         .item-card h3 { margin: 10px 0 5px 0; font-size: 1rem; font-weight: 700; color: #222; }
         .btn-details { background: #ff69b4; color: #fff; border: none; padding: 8px; border-radius: 12px; font-weight: bold; cursor: pointer; width: 100%; font-size: 0.8rem; }
         
-        /* الفوتر الجديد */
         footer { padding: 20px; text-align: center; background: #fff; border-top: 1px solid #eee; margin-top: 20px; }
-        .social-links { display: flex; justify-content: center; gap: 20px; font-size: 1.5rem; margin-bottom: 10px; }
-        .social-links a { color: #ff69b4; text-decoration: none; }
         .copy-info { font-size: 0.8rem; line-height: 1.8; color: #777; }
         .copy-info a { color: #ff69b4; text-decoration: none; font-weight: bold; }
         
-        *:focus { outline: none !important; -webkit-tap-highlight-color: transparent !important; }
+        *:focus { outline: none !important; }
     </style>
 </head>
 <body>
@@ -60,6 +66,21 @@
         <img src="images/logo brand.jpg" alt="Logo">
         <div id="progress-container"><div id="progress-bar"></div></div>
         <div id="percentage">0%</div>
+    </div>
+
+    <div class="menu-btn" onclick="toggleSidebar()">☰</div>
+    <div class="sidebar" id="sidebar">
+        <h2 style="cursor:pointer" onclick="toggleSidebar()">✕</h2>
+        <h3>تواصل معنا</h3>
+        <div class="social-links">
+            <a href="https://www.facebook.com/share/14h7vFHN7fZ/" target="_blank"><i class="fab fa-facebook"></i></a>
+            <a href="https://www.instagram.com/waqa.r9238?igsh=MWo4ZXA4dGU1ZzF1cg==" target="_blank"><i class="fab fa-instagram"></i></a>
+            <a href="https://www.tiktok.com/@waqar223441?_r=1&_t=ZS-97eVIItH5xE" target="_blank"><i class="fab fa-tiktok"></i></a>
+        </div>
+        <hr>
+        <h3>تعليمات هامة</h3>
+        <p>حضرتك بتعاين المنتج واللون والمقاس قبل الاستلام، لو معجبكش بتدفع مصاريف الشحن فقط ومش بتستلم الاوردر، وإن شاء الله يعجبك جداً لأننا واثقين من منتجنا وترجع وتطلب مننا تاني 🤝😁</p>
+        <p><strong>ملحوظة:</strong> بأكد علي حضرتك ضرورة المعاينة في وجود المندوب من خامة ولون ومقاس لأن الاستبدال أو الاسترجاع في حالة وجود المندوب فقط وليس بعد الاستلام .😍</p>
     </div>
 
     <div class="theme-toggle" id="theme-icon" onclick="toggleTheme()">🌙</div>
@@ -77,34 +98,27 @@
     <div class="container" id="collection"></div>
 
     <footer>
-        <div class="social-links">
-            <a href="https://www.facebook.com/share/14h7vFHN7fZ/" target="_blank"><i class="fab fa-facebook"></i></a>
-            <a href="https://www.instagram.com/waqa.r9238?igsh=MWo4ZXA4dGU1ZzF1cg==" target="_blank"><i class="fab fa-instagram"></i></a>
-            <a href="https://www.tiktok.com/@waqar223441?_r=1&_t=ZS-97eVIItH5xE" target="_blank"><i class="fab fa-tiktok"></i></a>
-        </div>
         <div class="copy-info">
             جميع حقوق النشر محفوظة لدى وقار © 2026<br>
-            Design by <a href="tel:01003800314">Eng Anas Gaber Shehata</a>
+            Design by <a href="tel:01003800314">Eng Anas Gaber Shehata</a><br>
+            <a href="tel:01003800314">01003800314</a>
         </div>
     </footer>
 
     <script>
+        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('active'); }
         let count = 0;
         let counter = setInterval(() => {
             if(count < 100) { count++; document.getElementById('percentage').innerText = count + "%"; }
             else { clearInterval(counter); }
         }, 40);
-
         window.onload = () => { setTimeout(() => { document.getElementById('splash-screen').style.opacity = '0'; setTimeout(() => { document.getElementById('splash-screen').style.display = 'none'; }, 800); }, 4000); };
-
         function toggleTheme() {
             document.body.classList.toggle('dark-mode');
             const icon = document.getElementById('theme-icon');
             icon.innerText = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
         }
-
         const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQSMKhHdK0M6unNQwdEsFoY72WO9prnqXk5z9XiuNJJfzbQm0_Gxn2Q0GCl0pBXAophE7b_pK2MdR3p/pub?output=csv';
-        
         fetch(csvUrl).then(res => res.text()).then(data => {
             const rows = data.split('\n').slice(1);
             const container = document.getElementById('collection');
