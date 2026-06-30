@@ -49,12 +49,12 @@
         const row = data.split('\n').find(r => r.startsWith(id + ','));
         if (row) {
             const cols = row.split(',');
-            const encodedName = encodeURIComponent(cols[1].trim());
+            const itemName = cols[1].trim();
             
-            // إنشاء عدد شرائح الصور ديناميكياً بناءً على imgCount
+            // إنشاء عدد شرائح الصور ديناميكياً بناءً على imgCount مع النمط (الاسم-الرقم)
             let slidesHtml = '';
             for(let i=1; i<=imgCount; i++) {
-                slidesHtml += `<div class="swiper-slide"><img src="images/${cols[1].trim()}-${i}.jpg"></div>`;
+                slidesHtml += `<div class="swiper-slide"><img src="images/${itemName}-${i}.jpg"></div>`;
             }
 
             document.getElementById('details').innerHTML = `
