@@ -35,24 +35,22 @@
         
         if (row) {
             const cols = row.split(',');
-            // العمود J هو العنصر العاشر، يعني رقمه في البرمجة هو [9]
-            // بنقرأ الاسم من [1]، السعر من [2]، النوت من [3]، المقاس من [5]، اللون من [6]، الوصف من [7]، والـ imageCode من [9]
-            const displayName = cols[1].trim();
-            const imageCode = cols[9].trim(); 
-            const encodedImage = encodeURIComponent(imageCode);
+            // الترتيب بعد حذف العمود الأخير: الاسم في [1]
+            const name = cols[1].trim(); 
+            const encodedName = encodeURIComponent(name);
 
             document.getElementById('details').innerHTML = `
                 <div class="swiper">
                     <div class="swiper-wrapper">
-                        <div class="swiper-slide"><img src="images/${encodedImage}%201.jpg"></div>
-                        <div class="swiper-slide"><img src="images/${encodedImage}%202.jpg"></div>
-                        <div class="swiper-slide"><img src="images/${encodedImage}%203.jpg"></div>
+                        <div class="swiper-slide"><img src="images/${encodedName}%201.jpg"></div>
+                        <div class="swiper-slide"><img src="images/${encodedName}%202.jpg"></div>
+                        <div class="swiper-slide"><img src="images/${encodedName}%203.jpg"></div>
                     </div>
                     <div class="swiper-button-next"></div>
                     <div class="swiper-button-prev"></div>
                 </div>
                 <div class="content">
-                    <h1>${displayName}</h1>
+                    <h1>${name}</h1>
                     <div class="price">${cols[2]} ج.م</div>
                     <p>${cols[7]}</p>
                     
