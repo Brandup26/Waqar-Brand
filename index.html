@@ -24,37 +24,32 @@
         #percentage { margin-top: 10px; font-weight: bold; color: #ff69b4; }
         @keyframes load { to { width: 100%; } }
 
-        body { font-family: 'Tajawal', sans-serif; background: #fffafb; color: #333; margin: 0; padding: 0; transition: background 0.3s, color 0.3s; }
+        body { font-family: 'Tajawal', sans-serif; background: #fffafb; color: #333; margin: 0; padding: 0; transition: background 0.3s, color 0.3s; min-height: 100vh; display: flex; flex-direction: column; }
         body.dark-mode { background: #1a1a1a; color: #f1f1f1; }
         body.dark-mode .item-card { background: #2d2d2d; }
         body.dark-mode .item-card h3 { color: #f1f1f1; }
-        body.dark-mode .sidebar { background: #2d2d2d; color: #f1f1f1; }
+        body.dark-mode footer { background: #2d2d2d; color: #f1f1f1; }
 
         header { background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('images/brand.jpg') center/cover; height: 35vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; color: white; }
         
-        /* القائمة الجانبية (Sidebar) */
-        .menu-btn { position: absolute; top: 15px; right: 15px; cursor: pointer; font-size: 1.8rem; z-index: 1000; }
-        .sidebar { 
-            position: fixed; top: 0; right: -250px; width: 250px; height: 100%; 
-            background: #fff; z-index: 2000; transition: 0.4s; padding-top: 60px; text-align: center; box-shadow: -5px 0 15px rgba(0,0,0,0.1);
-        }
-        .sidebar.active { right: 0; }
-        .sidebar h2 { margin-bottom: 20px; }
-        .social-links { display: flex; justify-content: center; gap: 20px; font-size: 2rem; margin-top: 20px; }
-        .social-links a { color: #ff69b4; text-decoration: none; }
-
         .theme-toggle { position: absolute; top: 15px; left: 15px; cursor: pointer; font-size: 1.5rem; z-index: 1000; user-select: none; }
         
         .divider-container { text-align: center; margin-top: 30px; }
         .divider { height: 2px; background: #ff69b4; margin: 10px auto; width: 60px; border-radius: 5px; }
         .collection-title { font-weight: bold; color: #ff69b4; margin-bottom: 5px; }
         
-        .container { padding: 0 10px 20px 10px; max-width: 500px; margin: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .container { padding: 0 10px 20px 10px; max-width: 500px; margin: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 15px; flex: 1; }
         .item-card { background: #fff; padding: 10px; border-radius: 20px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
         .item-card img { width: 100%; height: 150px; object-fit: contain; border-radius: 15px; }
         .item-card h3 { margin: 10px 0 5px 0; font-size: 1rem; font-weight: 700; color: #222; }
-        
         .btn-details { background: #ff69b4; color: #fff; border: none; padding: 8px; border-radius: 12px; font-weight: bold; cursor: pointer; width: 100%; font-size: 0.8rem; }
+        
+        /* الفوتر الجديد */
+        footer { padding: 20px; text-align: center; background: #fff; border-top: 1px solid #eee; margin-top: 20px; }
+        .social-links { display: flex; justify-content: center; gap: 20px; font-size: 1.5rem; margin-bottom: 10px; }
+        .social-links a { color: #ff69b4; text-decoration: none; }
+        .copy-info { font-size: 0.8rem; line-height: 1.8; color: #777; }
+        .copy-info a { color: #ff69b4; text-decoration: none; font-weight: bold; }
         
         *:focus { outline: none !important; -webkit-tap-highlight-color: transparent !important; }
     </style>
@@ -65,16 +60,6 @@
         <img src="images/logo brand.jpg" alt="Logo">
         <div id="progress-container"><div id="progress-bar"></div></div>
         <div id="percentage">0%</div>
-    </div>
-
-    <div class="menu-btn" onclick="toggleSidebar()">☰</div>
-    <div class="sidebar" id="sidebar">
-        <h2>تواصل معنا</h2>
-        <div class="social-links">
-            <a href="https://www.facebook.com/share/14h7vFHN7fZ/" target="_blank"><i class="fab fa-facebook"></i></a>
-            <a href="https://www.instagram.com/waqa.r9238?igsh=MWo4ZXA4dGU1ZzF1cg==" target="_blank"><i class="fab fa-instagram"></i></a>
-            <a href="https://www.tiktok.com/@waqar223441?_r=1&_t=ZS-97eVIItH5xE" target="_blank"><i class="fab fa-tiktok"></i></a>
-        </div>
     </div>
 
     <div class="theme-toggle" id="theme-icon" onclick="toggleTheme()">🌙</div>
@@ -91,9 +76,19 @@
 
     <div class="container" id="collection"></div>
 
+    <footer>
+        <div class="social-links">
+            <a href="https://www.facebook.com/share/14h7vFHN7fZ/" target="_blank"><i class="fab fa-facebook"></i></a>
+            <a href="https://www.instagram.com/waqa.r9238?igsh=MWo4ZXA4dGU1ZzF1cg==" target="_blank"><i class="fab fa-instagram"></i></a>
+            <a href="https://www.tiktok.com/@waqar223441?_r=1&_t=ZS-97eVIItH5xE" target="_blank"><i class="fab fa-tiktok"></i></a>
+        </div>
+        <div class="copy-info">
+            جميع حقوق النشر محفوظة لدى وقار © 2026<br>
+            Design by <a href="tel:01003800314">Eng Anas Gaber Shehata</a>
+        </div>
+    </footer>
+
     <script>
-        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('active'); }
-        
         let count = 0;
         let counter = setInterval(() => {
             if(count < 100) { count++; document.getElementById('percentage').innerText = count + "%"; }
