@@ -113,10 +113,6 @@
     <script>
         function toggleSidebar() { document.getElementById('sidebar').classList.toggle('active'); }
         
-        // منع الرجوع للخلف إلا للصفحة الرئيسية
-        history.pushState(null, null, location.href);
-        window.onpopstate = function () { window.location.href = 'index.html'; };
-
         let count = 0;
         let counter = setInterval(() => {
             if(count < 100) { count++; document.getElementById('percentage').innerText = count + "%"; }
