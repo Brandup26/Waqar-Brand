@@ -99,6 +99,11 @@
     <div class="container" id="collection"></div>
 
     <footer>
+        <div class="social-links">
+            <a href="https://www.facebook.com/share/14h7vFHN7fZ/" target="_blank"><i class="fab fa-facebook"></i></a>
+            <a href="https://www.instagram.com/waqa.r9238?igsh=MWo4ZXA4dGU1ZzF1cg==" target="_blank"><i class="fab fa-instagram"></i></a>
+            <a href="https://www.tiktok.com/@waqar223441?_r=1&_t=ZS-97eVIItH5xE" target="_blank"><i class="fab fa-tiktok"></i></a>
+        </div>
         <div class="copy-info">
             جميع الحقوق محفوظة لدى WAQAR 2026<br>
             Designed by eng / Anas Gaber shehata<br>
@@ -135,11 +140,12 @@
                 if(cols[0] && !isNaN(cols[0]) && cols[1]) {
                     const id = cols[0].trim();
                     const name = cols[1].trim();
+                    const imgCount = cols[2] ? parseInt(cols[2].trim()) : 1;
                     container.innerHTML += `
                         <div class="item-card">
-                            <img src="images/${name}.jpg" alt="${name}">
+                            <img src="images/${name}-1.jpg" alt="${name}">
                             <h3>${name}</h3>
-                            <button class="btn-details" onclick="window.location.href='details.html?id=${id}'">عرض التفاصيل</button>
+                            <button class="btn-details" onclick="window.location.href='details.html?id=${id}&count=${imgCount}'">عرض التفاصيل</button>
                         </div>
                     `;
                 }
