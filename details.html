@@ -12,15 +12,10 @@
         .swiper { width: 100%; height: 350px; border-radius: 0 0 30px 30px; }
         .swiper-slide img { width: 100%; height: 100%; object-fit: cover; }
         .content { padding: 20px; }
-        h1 { color: #ff69b4; }
+        h1 { color: #ff69b4; margin-bottom: 5px; }
         .price { font-size: 1.5rem; font-weight: bold; margin-bottom: 15px; }
         select { width: 100%; padding: 12px; margin-bottom: 10px; border-radius: 10px; border: 1px solid #ddd; }
-        
-        .note-container { 
-            background: #fff0f7; padding: 15px; border-radius: 15px; 
-            border: 1px solid #ff69b4; margin: 15px 0;
-        }
-        .note-label { font-weight: bold; color: #ff69b4; display: block; margin-bottom: 5px; }
+        .note-box { background: #fff0f7; padding: 15px; border-radius: 15px; border: 1px solid #ff69b4; margin: 15px 0; color: #555; }
         .buy-btn { background: #ff69b4; color: #fff; border: none; padding: 15px; width: 100%; border-radius: 15px; font-weight: bold; cursor: pointer; }
     </style>
 </head>
@@ -34,12 +29,15 @@
     const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQSMKhHdK0M6unNQwdEsFoY72WO9prnqXk5z9XiuNJJfzbQm0_Gxn2Q0GCl0pBXAophE7b_pK2MdR3p/pub?output=csv';
 
     fetch(csvUrl).then(res => res.text()).then(data => {
-        // بنقسم الصفوف
-        const lines = data.split('\n');
-        const row = lines.find(r => r.startsWith(id + ',')).split(',');
+        const rows = data.split('\n');
+        // هنا نبحث عن الصف الذي يبدأ بالـ ID
+        const rawRow = rows.find(r => r.startsWith(id + ','));
         
-        // دمج كل ما بعد العمود 7 في خانة الملاحظة عشان نضمن إن النص كله يظهر
-        const noteText = row.slice(8).join(' ');
+        // حل جذري: نستخدم تعبير منتظم (Regex) لتقسيم الصف مع مراعاة الفواصل داخل النصوص
+        const row = rawRow.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g).map(s => s.replace(/"/g, ''));
+        
+        // الآن الـ Note دائماً سيكون في آخر عنصر في المصفوفة مهما كان طول الصف
+        const noteText = row[row.length - 1];
 
         document.getElementById('details').innerHTML = `
             <div class="swiper">
@@ -54,9 +52,8 @@
                 <select>${row[5].split('-').map(s => `<option>${s.trim()}</option>`).join('')}</select>
                 <select>${row[6].split('-').map(c => `<option>${c.trim()}</option>`).join('')}</select>
                 
-                <div class="note-container">
-                    <span class="note-label">ملحوظة:</span>
-                    ${noteText}
+                <div class="note-box">
+                    <strong>ملحوظة:</strong><br>${noteText}
                 </div>
                 
                 <button class="buy-btn">إتمام الطلب عبر واتساب</button>
