@@ -30,40 +30,24 @@
 
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script>
-    const id = new URLSearchParams(window.location.search).get('id');
-    const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQSMKhHdK0M6unNQwdEsFoY72WO9prnqXk5z9XiuNJJfzbQm0_Gxn2Q0GCl0pBXAophE7b_pK2MdR3p/pub?output=csv';
-
+    // ... داخل دالة الـ fetch
     fetch(csvUrl).then(res => res.text()).then(data => {
         const lines = data.split('\n');
-        // دالة بسيطة عشان تفصل الصف وتجيب العناصر حتى لو الكلام فيه فواصل
         const row = lines.find(r => r.startsWith(id + ',')).split(',');
         
-        // جلب آخر عنصر في الصف مهما كان ترتيبه (الـ Notes)
-        const notes = row[row.length - 1]; 
+        // الترتيب: 7 هو الوصف (Description)، و 8 هو الملاحظة (Note)
+        const description = row[7]; 
+        const notes = row[8]; 
 
         document.getElementById('details').innerHTML = `
-            <div class="swiper">
-                <div class="swiper-wrapper">
-                    <div class="swiper-slide"><img src="${row[3].trim()}.jpg"></div>
-                </div>
+            <!-- ... باقي الكود -->
+            <p>${description}</p>
+            <div class="notes-container">
+                <span class="notes-label">ملحوظة:</span>
+                ${notes}
             </div>
-            <div class="content">
-                <h1>${row[1]}</h1>
-                <div class="price">${row[2]} ج.م</div>
-                <p>${row[7]}</p>
-                <select>${row[5].split('-').map(s => `<option>${s.trim()}</option>`).join('')}</select>
-                <select>${row[6].split('-').map(c => `<option>${c.trim()}</option>`).join('')}</select>
-                
-                <div class="notes-container">
-                    <span class="notes-label">ملحوظة:</span>
-                    ${notes}
-                </div>
-                
-                <button class="buy-btn">إتمام الطلب عبر واتساب</button>
-            </div>
+            <!-- ... باقي الكود -->
         `;
         new Swiper('.swiper', {});
     });
 </script>
-</body>
-</html>
