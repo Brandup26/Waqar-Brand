@@ -14,14 +14,14 @@
         .content { padding: 20px; }
         h1 { color: #ff69b4; margin-bottom: 5px; }
         .price { font-size: 1.5rem; font-weight: bold; margin-bottom: 15px; }
-        select { width: 100%; padding: 12px; margin-bottom: 10px; border-radius: 10px; border: 1px solid #ddd; }
+        select { width: 100%; padding: 12px; margin-bottom: 10px; border-radius: 10px; border: 1px solid #ddd; background: #fff; font-family: 'Tajawal', sans-serif; }
         
         .notes-container { 
             background: #fff0f7; padding: 15px; border-radius: 15px; 
             border: 1px solid #ff69b4; margin: 15px 0;
         }
         .notes-label { font-weight: bold; color: #ff69b4; display: block; margin-bottom: 5px; }
-        .buy-btn { background: #ff69b4; color: #fff; border: none; padding: 15px; width: 100%; border-radius: 15px; font-weight: bold; cursor: pointer; }
+        .buy-btn { background: #ff69b4; color: #fff; border: none; padding: 15px; width: 100%; border-radius: 15px; font-weight: bold; cursor: pointer; font-family: 'Tajawal', sans-serif; }
     </style>
 </head>
 <body>
@@ -37,14 +37,17 @@
         const lines = data.split('\n');
         const row = lines.find(r => r.startsWith(id + ',')).split(',');
         
-        // الترتيب: 7 هو الوصف (Description)، و 8 هو الملاحظة (Note)
+        // الترتيب الجديد بعد التبديل:
+        // row[3] هو الملحوظة (Note) لأنها أصبحت مكان مسار الصورة
+        // row[8] هو مسار الصورة (ImagePath) لأنها أصبحت في آخر عمود
+        const notes = row[3]; 
+        const imagePath = row[8].trim(); 
         const description = row[7];
-        const notes = row[8];
 
         document.getElementById('details').innerHTML = `
             <div class="swiper">
                 <div class="swiper-wrapper">
-                    <div class="swiper-slide"><img src="${row[3].trim()}.jpg"></div>
+                    <div class="swiper-slide"><img src="${imagePath}.jpg"></div>
                 </div>
             </div>
             <div class="content">
