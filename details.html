@@ -15,12 +15,13 @@
         h1 { color: #ff69b4; margin-bottom: 5px; }
         .price { font-size: 1.5rem; font-weight: bold; margin-bottom: 15px; }
         select { width: 100%; padding: 12px; margin-bottom: 10px; border-radius: 10px; border: 1px solid #ddd; }
-        /* ستايل الملحوظة الجديد */
-        .note-box { 
+        
+        /* تنسيق بوكس الملحوظة */
+        .note-container { 
             background: #fff0f7; padding: 15px; border-radius: 15px; 
-            border: 1px solid #ff69b4; margin: 15px 0; color: #555; font-size: 0.95rem;
+            border: 1px solid #ff69b4; margin: 15px 0;
         }
-        .note-title { font-weight: bold; color: #ff69b4; display: block; margin-bottom: 5px; }
+        .note-label { font-weight: bold; color: #ff69b4; display: block; margin-bottom: 5px; }
         .buy-btn { background: #ff69b4; color: #fff; border: none; padding: 15px; width: 100%; border-radius: 15px; font-weight: bold; cursor: pointer; }
     </style>
 </head>
@@ -34,14 +35,14 @@
     const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQSMKhHdK0M6unNQwdEsFoY72WO9prnqXk5z9XiuNJJfzbQm0_Gxn2Q0GCl0pBXAophE7b_pK2MdR3p/pub?output=csv';
 
     fetch(csvUrl).then(res => res.text()).then(data => {
-        // البحث عن الصف المطابق للـ ID
-        const row = data.split('\n').map(r => r.split(',')).find(r => r[0] == id);
+        const rows = data.split('\n').map(r => r.split(','));
+        const row = rows.find(r => r[0] == id);
         
-        // الترتيب: 1:Name, 2:Price, 5:Sizes, 6:Colors, 7:Description, 8:Note
+        // الوصول للبيانات بناءً على ترتيب الأعمدة في الشيت
         document.getElementById('details').innerHTML = `
             <div class="swiper">
                 <div class="swiper-wrapper">
-                    <div class="swiper-slide"><img src="${row[3].trim()}"></div>
+                    <div class="swiper-slide"><img src="${row[3].trim()}.jpg"></div>
                 </div>
             </div>
             <div class="content">
@@ -51,8 +52,8 @@
                 <select>${row[5].split('-').map(s => `<option>${s.trim()}</option>`).join('')}</select>
                 <select>${row[6].split('-').map(c => `<option>${c.trim()}</option>`).join('')}</select>
                 
-                <div class="note-box">
-                    <span class="note-title">ملحوظة:</span>
+                <div class="note-container">
+                    <span class="note-label">ملحوظة:</span>
                     ${row[8]}
                 </div>
                 
