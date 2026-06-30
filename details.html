@@ -12,15 +12,16 @@
         .swiper { width: 100%; height: 350px; border-radius: 0 0 30px 30px; }
         .swiper-slide img { width: 100%; height: 100%; object-fit: cover; }
         .content { padding: 20px; }
-        h1 { color: #ff69b4; }
+        h1 { color: #ff69b4; margin-bottom: 5px; }
         .price { font-size: 1.5rem; font-weight: bold; margin-bottom: 15px; }
         select { width: 100%; padding: 12px; margin-bottom: 10px; border-radius: 10px; border: 1px solid #ddd; }
         /* ستايل الملحوظة الجديد */
         .note-box { 
-            background: #fff; padding: 15px; border-radius: 15px; 
-            border: 1px solid #ff69b4; margin: 15px 0; color: #555;
+            background: #fff0f7; padding: 15px; border-radius: 15px; 
+            border: 1px solid #ff69b4; margin: 15px 0; color: #555; font-size: 0.95rem;
         }
-        .buy-btn { background: #ff69b4; color: #fff; border: none; padding: 15px; width: 100%; border-radius: 15px; font-weight: bold; }
+        .note-title { font-weight: bold; color: #ff69b4; display: block; margin-bottom: 5px; }
+        .buy-btn { background: #ff69b4; color: #fff; border: none; padding: 15px; width: 100%; border-radius: 15px; font-weight: bold; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -33,35 +34,32 @@
     const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQSMKhHdK0M6unNQwdEsFoY72WO9prnqXk5z9XiuNJJfzbQm0_Gxn2Q0GCl0pBXAophE7b_pK2MdR3p/pub?output=csv';
 
     fetch(csvUrl).then(res => res.text()).then(data => {
-        // البحث عن الصف بناءً على الـ ID
-        const row = data.split('\n').find(r => r.split(',')[0] == id).split(',');
+        // البحث عن الصف المطابق للـ ID
+        const row = data.split('\n').map(r => r.split(',')).find(r => r[0] == id);
         
-        // الترتيب: 8 هو آخر عمود (Note)
-        const noteText = row[8] ? row[8].trim() : "لا توجد ملاحظات.";
-
+        // الترتيب: 1:Name, 2:Price, 5:Sizes, 6:Colors, 7:Description, 8:Note
         document.getElementById('details').innerHTML = `
             <div class="swiper">
                 <div class="swiper-wrapper">
-                    <div class="swiper-slide"><img src="images/${row[1].trim()}-1.jpg"></div>
-                    <div class="swiper-slide"><img src="images/${row[1].trim()}-2.jpg"></div>
+                    <div class="swiper-slide"><img src="${row[3].trim()}"></div>
                 </div>
-                <div class="swiper-pagination"></div>
             </div>
             <div class="content">
                 <h1>${row[1]}</h1>
                 <div class="price">${row[2]} ج.م</div>
                 <p>${row[7]}</p>
-                <select><option>${row[5]}</option></select>
-                <select><option>${row[6]}</option></select>
+                <select>${row[5].split('-').map(s => `<option>${s.trim()}</option>`).join('')}</select>
+                <select>${row[6].split('-').map(c => `<option>${c.trim()}</option>`).join('')}</select>
                 
                 <div class="note-box">
-                    <strong>ملحوظة:</strong> ${noteText}
+                    <span class="note-title">ملحوظة:</span>
+                    ${row[8]}
                 </div>
                 
                 <button class="buy-btn">إتمام الطلب عبر واتساب</button>
             </div>
         `;
-        new Swiper('.swiper', { pagination: { el: '.swiper-pagination' } });
+        new Swiper('.swiper', {});
     });
 </script>
 </body>
