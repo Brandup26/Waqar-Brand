@@ -51,10 +51,10 @@
             const cols = row.split(',');
             const itemName = cols[1].trim();
             
-            // استخدام encodeURIComponent للتأكد من أن اسم الملف يظهر بشكل صحيح للمتصفح
+            // إنشاء عدد شرائح الصور ديناميكياً بنفس النمط الذي تستخدمه بالضبط
             let slidesHtml = '';
             for(let i=1; i<=imgCount; i++) {
-                slidesHtml += `<div class="swiper-slide"><img src="images/${encodeURIComponent(itemName)}-${i}.jpg"></div>`;
+                slidesHtml += `<div class="swiper-slide"><img src="images/${itemName}-${i}.jpg"></div>`;
             }
 
             document.getElementById('details').innerHTML = `
@@ -110,7 +110,7 @@
     }
 
     function sendWhatsApp(name, price) {
-        let msg = `طلب جديد:%0Aالمنتج: ${name}%0Aالسعر: ${price}%0Aالمقاس: ${document.getElementById('size').value}%0Aاللون: ${document.getElementById('color').value}%0Aالكمية: ${document.getElementById('qty').innerText}%0A%0Aبيانات العميل:%0Aالاسم: ${document.getElementById('name').value}%0Aالهاتف: ${document.getElementById('phone').value}%0Aالهاتف البديل: ${document.getElementById('altPhone').value}%0Aالعنوان: ${document.getElementById('city').value}، ${document.getElementById('area').value}， ${document.getElementById('street').value}， عمارة ${document.getElementById('building').value}， دور ${document.getElementById('floor').value}， شقة ${document.getElementById('flat').value}`;
+        let msg = `طلب جديد:%0Aالمنتج: ${name}%0Aالسعر: ${price}%0Aالمقاس: ${document.getElementById('size').value}%0Aاللون: ${document.getElementById('color').value}%0Aالكمية: ${document.getElementById('qty').innerText}%0A%0Aبيانات العميل:%0Aالاسم: ${document.getElementById('name').value}%0Aالهاتف: ${document.getElementById('phone').value}%0Aالهاتف البديل: ${document.getElementById('altPhone').value}%0Aالعنوان: ${document.getElementById('city').value}، ${document.getElementById('area').value}، ${document.getElementById('street').value}، عمارة ${document.getElementById('building').value}، دور ${document.getElementById('floor').value}، شقة ${document.getElementById('flat').value}`;
         window.open('https://wa.me/201208377222?text=' + msg);
     }
 </script>
