@@ -49,12 +49,12 @@
         const row = data.split('\n').find(r => r.startsWith(id + ','));
         if (row) {
             const cols = row.split(',');
-            const encodedName = encodeURIComponent(cols[1].trim());
+            const name = cols[1].trim(); 
             
             // إنشاء الشرائح ديناميكياً بناءً على عدد الصور الممرر
             let slidesHtml = '';
             for(let i=1; i<=imgCount; i++) {
-                slidesHtml += `<div class="swiper-slide"><img src="images/${encodedName}-${i}.jpg"></div>`;
+                slidesHtml += `<div class="swiper-slide"><img src="images/${name}-${i}.jpg"></div>`;
             }
 
             document.getElementById('details').innerHTML = `
